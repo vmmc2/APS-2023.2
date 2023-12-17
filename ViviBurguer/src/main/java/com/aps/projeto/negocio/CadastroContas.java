@@ -6,14 +6,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CadastroConta {
+public class CadastroContas {
     private final IRepositorioConta repositorioConta;
-    public boolean inserir(Conta conta) {
-        if(repositorioConta.encontrar(conta.getEmail()) == null) {
-            repositorioConta.inserir(conta);
-            return true;
-        }
-        return false;
+    public boolean registrarConta(Conta conta) {
+        return repositorioConta.registrarConta(conta);
+    }
+
+    public boolean existeConta(String email) {
+        return repositorioConta.existeConta(email);
+
     }
 
     public Conta exibir(String email) {

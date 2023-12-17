@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class Fachada {
-    private final ControladorConta controladorConta;
+    private final ControladorSignUp controladorSignUp;
 
-    public boolean inserirConta(Conta conta) {
-        return controladorConta.inserir(conta);
+    public String efetuarCadastro(Conta conta) {
+        return controladorSignUp.efetuarCadastro(conta);
     }
 
     public Conta exibirConta(String email) {
-        return controladorConta.exibir(email);
+        return controladorSignUp.exibir(email);
     }
 }

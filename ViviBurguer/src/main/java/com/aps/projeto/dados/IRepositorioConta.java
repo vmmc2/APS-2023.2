@@ -4,7 +4,8 @@ import com.aps.projeto.negocio.Conta;
 
 public interface IRepositorioConta {
 
-    void inserir(Conta conta);
+    boolean registrarConta(Conta conta);
+    boolean existeConta(String email);
 
     Conta encontrar(String email);
 }

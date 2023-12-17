@@ -6,13 +6,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class RepositorioContaSpring implements IRepositorioConta{
+public class RepositorioConta implements IRepositorioConta{
     private final ContaDAO contaDAO;
     @Override
-    public void inserir(Conta conta) {
-        contaDAO.save(conta);
+    public boolean registrarConta(Conta conta) {
+      contaDAO.save(conta);
+      return true;
     }
 
+    @Override
+    public boolean existeConta(String email) { return contaDAO.existsByEmail(email); }
     @Override
     public Conta encontrar(String email) {
         return contaDAO.findByEmail(email);
