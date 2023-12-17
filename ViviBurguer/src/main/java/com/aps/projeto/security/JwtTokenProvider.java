@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-  private final String secretKey = "secretpassword"; // Troque pela sua chave secreta
+  private final String secretKey = "secretpassword";
 
   public String generateToken(String username) {
     Date now = new Date();

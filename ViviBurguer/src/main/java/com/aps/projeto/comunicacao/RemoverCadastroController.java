@@ -16,8 +16,8 @@ public class RemoverCadastroController {
   private final Fachada fachada;
   private final JwtTokenProvider jwtTokenProvider;
   @DeleteMapping("/conta/remover")
-  public ResponseEntity<String> removerConta(@RequestHeader("token") String token, @RequestParam("email") String email, @RequestParam("senha") String senha) {
-    if(!jwtTokenProvider.validateToken(token)) {
+  public ResponseEntity<String> removerConta(@RequestHeader("Authorization") String Authorization, @RequestParam("email") String email, @RequestParam("senha") String senha) {
+    if(!jwtTokenProvider.validateToken(Authorization.split(" ")[1])) {
       return new ResponseEntity<>("Acesso Negado", HttpStatus.FORBIDDEN);
     }
     return ResponseEntity.ok(fachada.removerConta(email, senha));
