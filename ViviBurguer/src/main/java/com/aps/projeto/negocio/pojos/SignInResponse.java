@@ -13,5 +13,4 @@ public class SignInResponse {
   String email;
   String message;
   HttpStatus status;
-
 }
