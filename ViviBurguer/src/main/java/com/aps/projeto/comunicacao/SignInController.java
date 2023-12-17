@@ -15,7 +15,7 @@ public class SignInController {
   private final Fachada fachada;
 
   @PostMapping("/conta/signIn")
-  public ResponseEntity<SignInResponse> efetuarSignIn(@RequestParam("email") String email, @RequestParam("senha") String senha) {
-    return ResponseEntity.ok(fachada.efetuarSignIn(email, senha));
+  public SignInResponse efetuarSignIn(@RequestParam("email") String email, @RequestParam("senha") String senha) {
+    return fachada.efetuarSignIn(email, senha);
   }
 }
