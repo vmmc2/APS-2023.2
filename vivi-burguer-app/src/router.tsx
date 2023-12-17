@@ -19,18 +19,19 @@ const Default = () => {
   );
 };
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Default />,
-    children: [
-      { path: '/', element: <Home /> },
-      { path: '/register', element: <Home /> },
-      { path: '/products', element: <Products /> },
-      { path: '/checkout', element: <Checkout /> },
-    ],
-  },
-],
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Default />,
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/register", element: <Home /> },
+        { path: "/products", element: <Products /> },
+        { path: "/checkout", element: <Checkout /> },
+      ],
+    },
+  ],
   { basename: "/APS-2023.2/" }
 );
 

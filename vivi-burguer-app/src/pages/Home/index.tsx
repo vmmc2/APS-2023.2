@@ -27,7 +27,10 @@ function Home() {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Email address
               </label>
               <div className="mt-2">
@@ -44,7 +47,10 @@ function Home() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
                   Password
                 </label>
               </div>
@@ -71,15 +77,18 @@ function Home() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
-            <Link to="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            Not a member?{" "}
+            <Link
+              to="/register"
+              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
               Register your account now.
             </Link>
           </p>
         </div>
       </div>
     </DefaultPage>
-  )
+  );
 }
 
 export default Home;
