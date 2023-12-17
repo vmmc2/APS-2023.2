@@ -6,15 +6,23 @@ import Products from "./pages/Products";
 import Checkout from "./pages/Checkout";
 import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 import ShoppingCartSlideOver from "./components/ShoppingCartSlideOver";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { LoginProvider } from "./context/LoginContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Default = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   return (
     <>
-      <ShoppingCartProvider setIsCartOpen={setIsCartOpen}>
-        <ShoppingCartSlideOver isOpen={isCartOpen} />
-        <Outlet />
-      </ShoppingCartProvider>
+      <LoginProvider>
+        <ShoppingCartProvider setIsCartOpen={setIsCartOpen}>
+          <ToastContainer />
+          <ShoppingCartSlideOver isOpen={isCartOpen} />
+          <Outlet />
+        </ShoppingCartProvider>
+      </LoginProvider>
     </>
   );
 };
@@ -26,7 +34,8 @@ const router = createBrowserRouter(
       element: <Default />,
       children: [
         { path: "/", element: <Home /> },
-        { path: "/register", element: <Home /> },
+        { path: "/login", element: <Login /> },
+        { path: "/register", element: <Register /> },
         { path: "/products", element: <Products /> },
         { path: "/checkout", element: <Checkout /> },
       ],
