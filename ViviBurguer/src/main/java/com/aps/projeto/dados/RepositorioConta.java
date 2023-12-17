@@ -20,4 +20,5 @@ public class RepositorioConta implements IRepositorioConta{
     public Conta encontrar(String email) {
         return contaDAO.findByEmail(email);
     }
+
 }

@@ -11,7 +11,7 @@ public class ControladorSignUp {
     private static final  String CADASTRO_FALHA = "Não foi possível cadastrar a conta";
     private static final  String CADASTRO_EXISTE = "Conta já existe";
 
-    public String efetuarCadastro(Conta conta) {
+    public String efetuarSignUp(Conta conta) {
         if(!cadastroContas.existeConta(conta.getEmail())) {
             boolean status = cadastroContas.registrarConta(conta);
             return status ? CADASTRO_SUCESSO : CADASTRO_FALHA;

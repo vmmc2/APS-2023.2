@@ -21,4 +21,11 @@ public class CadastroContas {
        return repositorioConta.encontrar(email);
     }
 
+  public Conta validarSenha(String email, String senha) {
+      Conta conta = repositorioConta.encontrar(email);
+      if(conta.getSenha().equals(senha)) {
+        return conta;
+      }
+      return null;
+  }
 }

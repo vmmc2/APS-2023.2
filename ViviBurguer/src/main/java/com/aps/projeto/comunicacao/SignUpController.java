@@ -11,13 +11,13 @@ public class SignUpController {
 
     private final Fachada fachada;
 
-    @PostMapping("/conta/cadastro")
-    public ResponseEntity<String> efetuarCadastro(@RequestBody Conta conta) {
-        return ResponseEntity.ok(fachada.efetuarCadastro(conta));
+    @PostMapping("/conta/signUp")
+    public String efetuarSignUp(@RequestBody Conta conta) {
+        return fachada.efetuarSignUp(conta);
     }
 
-    @GetMapping("/conta/exibir")
-    public ResponseEntity<Conta> exibirConta(@RequestParam String email) {
-        return ResponseEntity.ok(fachada.exibirConta(email));
+    @GetMapping("/conta/get")
+    public Conta exibirConta(@RequestParam String email) {
+        return fachada.exibirConta(email);
     }
 }
