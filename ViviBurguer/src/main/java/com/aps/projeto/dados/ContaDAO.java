@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface ContaDAO extends CrudRepository<Conta, Long> {
     Conta findByEmail(String email);
     boolean existsByEmail(String email);
+    void deleteByEmail(String email);
 }

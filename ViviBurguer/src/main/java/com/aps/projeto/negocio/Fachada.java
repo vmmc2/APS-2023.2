@@ -2,7 +2,6 @@ package com.aps.projeto.negocio;
 
 import com.aps.projeto.negocio.pojos.SignInResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class Fachada {
     private final ControladorSignUp controladorSignUp;
     private final ControladorSignIn controladorSignIn;
+    private final ControladorRemoverCadastro controladorRemoverCadastro;
 
     public String efetuarSignUp(Conta conta) {
         return controladorSignUp.efetuarSignUp(conta);
@@ -21,5 +21,9 @@ public class Fachada {
 
     public SignInResponse efetuarSignIn(String email, String senha) {
         return controladorSignIn.efetuarSignIn(email, senha);
+    }
+
+    public String removerConta(String email, String senha) {
+        return controladorRemoverCadastro.removerConta(email, senha);
     }
 }

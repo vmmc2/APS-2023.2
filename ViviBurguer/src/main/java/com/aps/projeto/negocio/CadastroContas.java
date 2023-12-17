@@ -16,16 +16,17 @@ public class CadastroContas {
         return repositorioConta.existeConta(email);
 
     }
-
     public Conta exibir(String email) {
        return repositorioConta.encontrar(email);
     }
-
-  public Conta validarSenha(String email, String senha) {
+    public Conta validarCredenciaisConta(String email, String senha) {
       Conta conta = repositorioConta.encontrar(email);
       if(conta.getSenha().equals(senha)) {
         return conta;
       }
       return null;
-  }
+    }
+    public void apagarConta(String email) {
+      repositorioConta.remover(email);
+    }
 }

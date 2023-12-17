@@ -2,7 +2,6 @@ package com.aps.projeto.negocio;
 
 import com.aps.projeto.negocio.pojos.SignInResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +12,7 @@ public class ControladorSignIn {
   private final CadastroContas cadastroContas;
   public SignInResponse efetuarSignIn(String email, String senha) {
     if(cadastroContas.existeConta(email)) {
-      Conta conta = cadastroContas.validarSenha(email, senha);
+      Conta conta = cadastroContas.validarCredenciaisConta(email, senha);
       return conta != null ? signInOk(conta) : signInForbidden();
     } else {
       return signInNotFound();

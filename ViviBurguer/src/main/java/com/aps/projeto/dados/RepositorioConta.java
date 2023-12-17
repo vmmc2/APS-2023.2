@@ -21,4 +21,10 @@ public class RepositorioConta implements IRepositorioConta{
         return contaDAO.findByEmail(email);
     }
 
+    @Override
+    public void remover(String email) {
+        Conta conta = contaDAO.findByEmail(email);
+        contaDAO.deleteById(conta.getId());
+    }
+
 }
