@@ -2,7 +2,6 @@ import { httpRequest } from "./services/api";
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, RouterProvider } from "react-router-dom";
-import router from "./router";
 import type { AxiosRequestConfig } from "axios";
 import type { QueryKey } from "@tanstack/react-query";
 import { ShoppingCartProvider } from "./context/ShoppingCartContext";
@@ -31,11 +30,9 @@ function App() {
   });
 
   return (
-    <ShoppingCartProvider setIsCartOpen={null}>
-      <QueryClientProvider client={queryClient}>
-        <Router />
-      </QueryClientProvider>
-    </ShoppingCartProvider>
+    <QueryClientProvider client={queryClient}>
+      <Router />
+    </QueryClientProvider>
   );
 }
 

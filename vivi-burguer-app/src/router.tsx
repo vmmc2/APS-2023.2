@@ -4,14 +4,17 @@ import React, { useState } from "react";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Checkout from "./pages/Checkout";
+import { ShoppingCartProvider } from "./context/ShoppingCartContext";
 import ShoppingCartSlideOver from "./components/ShoppingCartSlideOver";
 
-const AppLayout = () => {
+const Default = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   return (
     <>
-      <ShoppingCartSlideOver isOpen={isCartOpen} />
-      <Outlet />
+      <ShoppingCartProvider setIsCartOpen={setIsCartOpen}>
+        <ShoppingCartSlideOver isOpen={isCartOpen} />
+        <Outlet />
+      </ShoppingCartProvider>
     </>
   );
 };
@@ -19,7 +22,7 @@ const AppLayout = () => {
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <AppLayout />,
+    element: <Default />,
     children: [
       { path: '/', element: <Home /> },
       { path: '/register', element: <Home /> },
