@@ -5,12 +5,12 @@ import com.aps.projeto.negocio.entity.ContaDTO;
 
 public class ContaMapper {
   public static ContaDTO contaToContaDto(Conta conta) {
-    return new ContaDTO()
-        .setNome(conta.getNome())
-        .setCpf(conta.getCpf().getCpf())
-        .setTelefone(conta.getTelefone())
-        .setEmail(conta.getEmail())
-        .setSenha(conta.getSenha())
-        .setEndereco(conta.getEndereco());
+    return new ContaDTO.Builder()
+        .nome(conta.getNome())
+        .cpf(conta.getCpf().getCpf())
+        .telefone(conta.getTelefone())
+        .email(conta.getEmail())
+        .senha(conta.getSenha())
+        .build();
   }
 }

@@ -45,13 +45,13 @@ public class ComunicacaoOperadoraCartao {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    PagamentoOperadoraCartao pagamento = new PagamentoOperadoraCartao()
-        .setNumeroCartao(cartao.getNumero())
-        .setCvv(cartao.getCvv())
-        .setCpf(cartao.getCpf().getCpf())
-        .setValorCompra(valorCompra)
-        .setTipoCompra(cartao.getTipoCartao());
-
+    PagamentoOperadoraCartao pagamento = new PagamentoOperadoraCartao.Builder()
+        .numeroCartao(cartao.getNumero())
+        .cvv(cartao.getCvv())
+        .cpf(cartao.getCpf().getCpf())
+        .valorCompra(valorCompra)
+        .tipoCompra(cartao.getTipoCartao())
+        .build();
     HttpEntity<PagamentoOperadoraCartao> request = new HttpEntity<>(pagamento, headers);
     String url = endpoint + BUY_PATH;
     ResponseEntity<Comprovante> response = restTemplate.postForEntity(url, request, Comprovante.class);
