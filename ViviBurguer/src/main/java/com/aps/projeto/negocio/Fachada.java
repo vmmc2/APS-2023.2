@@ -1,7 +1,9 @@
 package com.aps.projeto.negocio;
 
+import com.aps.projeto.negocio.entity.Carrinho;
 import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.entity.CartaoDTO;
+import com.aps.projeto.negocio.entity.Comprovante;
 import com.aps.projeto.negocio.entity.Conta;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.negocio.pojos.CPF;
@@ -18,6 +20,7 @@ public class Fachada {
     private final ControladorSignIn controladorSignIn;
     private final ControladorRemoverCadastro controladorRemoverCadastro;
     private final ControldorAdicionarCartao controldorAdicionarCartao;
+    private final ControladorEfetuarCompra controladorEfetuarCompra;
 
     public BasicResponse efetuarSignUp(Conta conta) {
         return controladorSignUp.efetuarSignUp(conta);
@@ -42,5 +45,9 @@ public class Fachada {
 
     public List<Cartao> exibirCartoes(CPF cpf) {
         return controldorAdicionarCartao.exibirCartoes(cpf);
+    }
+
+    public Comprovante efetuarCompra(Cartao cartao, Carrinho carrinho) {
+        return controladorEfetuarCompra.efetuarCompra(cartao, carrinho);
     }
 }
