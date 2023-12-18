@@ -3,6 +3,7 @@ import DefaultPage from "../DefaultPage";
 import { showPromiseToast } from "../../utilities/toastWindow";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ function Register() {
 
   function tryRegister() {
     const promise = api.post("conta/signUp", form).then((response) => {
-      if (response.status === 200) {
+      if (response.status >= 200 && response.status < 300) {
         navigate("/login");
       }
     });
@@ -183,15 +184,14 @@ function Register() {
             </div>
 
             <div>
-              <button
-                type="submit"
+              <Button
                 onClick={() => {
                   tryRegister();
                 }}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Register
-              </button>
+              </Button>
             </div>
           </form>
         </div>

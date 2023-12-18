@@ -13,7 +13,7 @@
   }
   ```
 */
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
@@ -21,6 +21,9 @@ import DefaultPage from "../DefaultPage";
 import { formatCurrency } from "../../utilities/currencyFormatter";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import { deliveryAddresses, paymentCards } from "../../mock";
+import { PaymentCard } from "../../types";
+import { useQuery } from "@tanstack/react-query";
+import { useLogin } from "../../context/LoginContext";
 
 const products = [
   {
@@ -42,14 +45,39 @@ function classNames(...classes) {
 }
 
 export default function Checkout() {
+  const { login } = useLogin();
   const [selectedDeliveryAddress, setSelectedDeliveryAddress] = useState(
     deliveryAddresses[0]
   );
   const [selectedPaymentCard, setSelectedPaymentCard] = useState(
     paymentCards[0]
   );
-  const { cartItems, removeFromCart, closeCart, getTotalFromCart } =
-    useShoppingCart();
+  const { cartItems, removeFromCart, getTotalFromCart } = useShoppingCart();
+
+  const [state, setState] = useState<PaymentCard[]>([]);
+  const { data, isLoading } = useQuery<any>({
+    queryKey: [
+      "cartao/get",
+      "GET",
+      { headers: { Authorization: login.token }, params: { cpf: login.cpf } },
+    ],
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (!isLoading) {
+      let paymentCards: PaymentCard[] = [];
+      data.forEach((element) => {
+        paymentCards.push({
+          name: element["titular"],
+          type: element["tipoCartao"],
+          lastNumbers: element["numero"].slice(-4),
+          issuer: element["bandeira"],
+        });
+      });
+      setState(paymentCards);
+    }
+  }, [data]);
 
   return (
     <DefaultPage>
@@ -154,84 +182,88 @@ export default function Checkout() {
                     onChange={setSelectedPaymentCard}
                   >
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                      {paymentCards.map((paymentCard, index) => (
-                        <RadioGroup.Option
-                          key={index}
-                          value={paymentCard}
-                          className={({ checked, active }) =>
-                            classNames(
-                              checked
-                                ? "border-transparent"
-                                : "border-gray-300",
-                              active ? "ring-2 ring-indigo-500" : "",
-                              "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
-                            )
-                          }
-                        >
-                          {({ checked, active }) => (
-                            <>
-                              <span className="flex flex-1">
-                                <span className="flex flex-col">
-                                  <RadioGroup.Label
-                                    as="span"
-                                    className="block text-sm font-medium text-gray-900"
-                                  >
-                                    {paymentCard.name}
-                                  </RadioGroup.Label>
-                                  <RadioGroup.Description
-                                    as="span"
-                                    className="mt-1 flex items-center text-sm text-gray-500"
-                                  >
-                                    {paymentCard.type === "credit"
-                                      ? "Credit Card"
-                                      : "Debit Card"}
-                                  </RadioGroup.Description>
-                                  <RadioGroup.Description
-                                    as="span"
-                                    className="mt-1 flex items-center text-sm text-gray-500"
-                                  >
-                                    Ends in {paymentCard.lastNumbers}
-                                  </RadioGroup.Description>
-                                  <RadioGroup.Label>
-                                    <svg
-                                      className="absolute h-8 w-auto sm:h-6 sm:flex-shrink-0 bottom-2 right-2"
-                                      viewBox="0 0 36 24"
-                                      aria-hidden="true"
+                      {isLoading ? (
+                        <div>Loading...</div>
+                      ) : (
+                        state.map((paymentCard, index) => (
+                          <RadioGroup.Option
+                            key={index}
+                            value={paymentCard}
+                            className={({ checked, active }) =>
+                              classNames(
+                                checked
+                                  ? "border-transparent"
+                                  : "border-gray-300",
+                                active ? "ring-2 ring-indigo-500" : "",
+                                "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none"
+                              )
+                            }
+                          >
+                            {({ checked, active }) => (
+                              <>
+                                <span className="flex flex-1">
+                                  <span className="flex flex-col">
+                                    <RadioGroup.Label
+                                      as="span"
+                                      className="block text-sm font-medium text-gray-900"
                                     >
-                                      <rect
-                                        width={36}
-                                        height={24}
-                                        fill="#224DBA"
-                                        rx={4}
-                                      />
-                                      <path
-                                        fill="#fff"
-                                        d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z"
-                                      />
-                                    </svg>
-                                  </RadioGroup.Label>
+                                      {paymentCard.name}
+                                    </RadioGroup.Label>
+                                    <RadioGroup.Description
+                                      as="span"
+                                      className="mt-1 flex items-center text-sm text-gray-500"
+                                    >
+                                      {paymentCard.type === "credit"
+                                        ? "Credit Card"
+                                        : "Debit Card"}
+                                    </RadioGroup.Description>
+                                    <RadioGroup.Description
+                                      as="span"
+                                      className="mt-1 flex items-center text-sm text-gray-500"
+                                    >
+                                      Ends in {paymentCard.lastNumbers}
+                                    </RadioGroup.Description>
+                                    <RadioGroup.Label>
+                                      <svg
+                                        className="absolute h-8 w-auto sm:h-6 sm:flex-shrink-0 bottom-2 right-2"
+                                        viewBox="0 0 36 24"
+                                        aria-hidden="true"
+                                      >
+                                        <rect
+                                          width={36}
+                                          height={24}
+                                          fill="#224DBA"
+                                          rx={4}
+                                        />
+                                        <path
+                                          fill="#fff"
+                                          d="M10.925 15.673H8.874l-1.538-6c-.073-.276-.228-.52-.456-.635A6.575 6.575 0 005 8.403v-.231h3.304c.456 0 .798.347.855.75l.798 4.328 2.05-5.078h1.994l-3.076 7.5zm4.216 0h-1.937L14.8 8.172h1.937l-1.595 7.5zm4.101-5.422c.057-.404.399-.635.798-.635a3.54 3.54 0 011.88.346l.342-1.615A4.808 4.808 0 0020.496 8c-1.88 0-3.248 1.039-3.248 2.481 0 1.097.969 1.673 1.653 2.02.74.346 1.025.577.968.923 0 .519-.57.75-1.139.75a4.795 4.795 0 01-1.994-.462l-.342 1.616a5.48 5.48 0 002.108.404c2.108.057 3.418-.981 3.418-2.539 0-1.962-2.678-2.077-2.678-2.942zm9.457 5.422L27.16 8.172h-1.652a.858.858 0 00-.798.577l-2.848 6.924h1.994l.398-1.096h2.45l.228 1.096h1.766zm-2.905-5.482l.57 2.827h-1.596l1.026-2.827z"
+                                        />
+                                      </svg>
+                                    </RadioGroup.Label>
+                                  </span>
                                 </span>
-                              </span>
-                              {checked ? (
-                                <CheckCircleIcon
-                                  className="h-5 w-5 text-indigo-600"
+                                {checked ? (
+                                  <CheckCircleIcon
+                                    className="h-5 w-5 text-indigo-600"
+                                    aria-hidden="true"
+                                  />
+                                ) : null}
+                                <span
+                                  className={classNames(
+                                    active ? "border" : "border-2",
+                                    checked
+                                      ? "border-indigo-500"
+                                      : "border-transparent",
+                                    "pointer-events-none absolute -inset-px rounded-lg"
+                                  )}
                                   aria-hidden="true"
                                 />
-                              ) : null}
-                              <span
-                                className={classNames(
-                                  active ? "border" : "border-2",
-                                  checked
-                                    ? "border-indigo-500"
-                                    : "border-transparent",
-                                  "pointer-events-none absolute -inset-px rounded-lg"
-                                )}
-                                aria-hidden="true"
-                              />
-                            </>
-                          )}
-                        </RadioGroup.Option>
-                      ))}
+                              </>
+                            )}
+                          </RadioGroup.Option>
+                        ))
+                      )}
                     </div>
                   </RadioGroup>
                 </div>
