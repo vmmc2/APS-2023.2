@@ -2,7 +2,10 @@ package com.aps.projeto.negocio;
 
 import com.aps.projeto.comunicacao.ComunicacaoOperadoraCartao;
 import com.aps.projeto.negocio.entity.Cartao;
+import com.aps.projeto.negocio.entity.CartaoDTO;
 import com.aps.projeto.negocio.pojos.BasicResponse;
+import com.aps.projeto.negocio.pojos.CPF;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
@@ -31,5 +34,9 @@ public class ControldorAdicionarCartao {
     } else {
       return new BasicResponse(CAD_CARD_EXISTS, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public List<Cartao> exibirCartoes(CPF cpf) {
+    return cadastroCartoes.exibirCartoes(cpf);
   }
 }

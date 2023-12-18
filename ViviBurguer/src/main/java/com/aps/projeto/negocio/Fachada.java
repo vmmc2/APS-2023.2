@@ -1,9 +1,12 @@
 package com.aps.projeto.negocio;
 
 import com.aps.projeto.negocio.entity.Cartao;
+import com.aps.projeto.negocio.entity.CartaoDTO;
 import com.aps.projeto.negocio.entity.Conta;
 import com.aps.projeto.negocio.pojos.BasicResponse;
+import com.aps.projeto.negocio.pojos.CPF;
 import com.aps.projeto.negocio.pojos.SignInResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -35,5 +38,9 @@ public class Fachada {
     public BasicResponse adicionarCartao(Cartao cartao) {
         return controldorAdicionarCartao.adicionarCartao(cartao);
 
+    }
+
+    public List<Cartao> exibirCartoes(CPF cpf) {
+        return controldorAdicionarCartao.exibirCartoes(cpf);
     }
 }

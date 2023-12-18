@@ -1,7 +1,5 @@
 package com.aps.projeto.negocio.pojos;
 
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +8,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @Setter
+@Getter
 @NoArgsConstructor
 @ToString
 public class CPF {
@@ -18,9 +17,7 @@ public class CPF {
   public CPF(String cpf) {
     this.cpf = cpf;
   }
-  public String getCpf() {
-    return cpf;
-  }
+
   public boolean verify() {
     String cpf = this.cpf.replaceAll("[^0-9]", "");
 
