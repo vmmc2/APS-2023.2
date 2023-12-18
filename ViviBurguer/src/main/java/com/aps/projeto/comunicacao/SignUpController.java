@@ -1,6 +1,8 @@
 package com.aps.projeto.comunicacao;
 import com.aps.projeto.negocio.entity.Conta;
 import com.aps.projeto.negocio.Fachada;
+import com.aps.projeto.negocio.entity.ContaDTO;
+import com.aps.projeto.negocio.mapper.ContaMapper;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,10 @@ public class SignUpController {
     }
 
     @GetMapping("/conta/get")
-    public ResponseEntity<Conta> exibirConta(@RequestParam String email) {
+    public ResponseEntity<ContaDTO> exibirConta(@RequestParam String email) {
         Conta conta = fachada.exibirConta(email);
         if(conta != null) {
-            return new ResponseEntity<>(conta, HttpStatus.OK);
+            return new ResponseEntity<>(ContaMapper.contaToContaDto(conta), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
