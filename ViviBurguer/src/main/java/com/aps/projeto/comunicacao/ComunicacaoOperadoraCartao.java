@@ -3,7 +3,7 @@ import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.entity.CartaoDTO;
 import com.aps.projeto.negocio.entity.Comprovante;
 import com.aps.projeto.negocio.entity.PagamentoOperadoraCartao;
-import com.aps.projeto.negocio.mapper.CartaoMapper;
+import com.aps.projeto.negocio.adapter.CartaoAdapter;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 
 import java.math.BigDecimal;
@@ -32,7 +32,7 @@ public class ComunicacaoOperadoraCartao {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
 
-    HttpEntity<CartaoDTO> request = new HttpEntity<>(CartaoMapper.cartaoToCartaoDto(cartao), headers);
+    HttpEntity<CartaoDTO> request = new HttpEntity<>(CartaoAdapter.cartaoToCartaoDto(cartao), headers);
     String url = endpoint + VALIDATE_PATH;
     ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 

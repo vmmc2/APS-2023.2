@@ -1,12 +1,11 @@
-package com.aps.projeto.negocio.mapper;
+package com.aps.projeto.negocio.adapter;
 
 import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.entity.CartaoDTO;
 import com.aps.projeto.negocio.pojos.CPF;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 
-public class CartaoMapper {
+public class CartaoAdapter {
 
   public static Cartao cartaoDtoToCartao(CartaoDTO cartaoDTO) {
     String[] data = cartaoDTO.getDataValidade().split("-");

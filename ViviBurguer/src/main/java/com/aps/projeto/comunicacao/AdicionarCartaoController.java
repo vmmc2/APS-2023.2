@@ -3,7 +3,7 @@ package com.aps.projeto.comunicacao;
 import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.Fachada;
 import com.aps.projeto.negocio.entity.CartaoDTO;
-import com.aps.projeto.negocio.mapper.CartaoMapper;
+import com.aps.projeto.negocio.adapter.CartaoAdapter;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.negocio.pojos.CPF;
 import com.aps.projeto.security.JwtTokenProvider;
@@ -40,7 +40,7 @@ public class AdicionarCartaoController {
     }
     List<CartaoDTO> cartoes = fachada.exibirCartoes(cpf)
         .stream()
-        .map(CartaoMapper::cartaoToCartaoDto)
+        .map(CartaoAdapter::cartaoToCartaoDto)
         .collect(Collectors.toList());
 
     if (cartoes.isEmpty()) {
