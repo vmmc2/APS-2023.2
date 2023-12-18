@@ -19,7 +19,7 @@ public class ControldorAdicionarCartao {
   private final static String CAD_CARD_EXISTS = "O cartão já existe";
   public BasicResponse adicionarCartao(Cartao cartao) {
     if(!cadastroCartoes.existeCartao(cartao)) {
-      if(comunicacaoOperadoraCartao.existeCartao(cartao)) {
+      if(comunicacaoOperadoraCartao.existeCartao(cartao).getStatus().equals(HttpStatus.OK)) {
         if(cadastroCartoes.registrarCartao(cartao)) {
           return new BasicResponse(CAD_CARD_SUCESSO, HttpStatus.CREATED);
         } else {

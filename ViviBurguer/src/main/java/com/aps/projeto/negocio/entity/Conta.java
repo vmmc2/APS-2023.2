@@ -1,5 +1,9 @@
 package com.aps.projeto.negocio.entity;
+import com.aps.projeto.negocio.converter.CPFConverter;
+import com.aps.projeto.negocio.pojos.CPF;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,7 +26,8 @@ public class Conta {
     private long id;
     private String nome;
     @Column(unique = true)
-    private String cpf;
+    @Convert(converter = CPFConverter.class)
+    private CPF cpf;
     private String telefone;
     @Column(unique = true)
     private String email;
