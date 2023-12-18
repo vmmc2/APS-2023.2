@@ -129,7 +129,7 @@ def buy_with_card():
     try:
         request_data = request.get_json()
         buy_request = BuyRequestSchema().load(request_data)
-
+        '''
         if not buy_request['cpf'] in registered_cards[buy_request['tipo_compra']]:
             raise NotFoundException(message="The given user is not registered in the system")
         
@@ -151,6 +151,7 @@ def buy_with_card():
                     registered_cards[buy_request['tipo_compra']][buy_request['cpf']][buy_request['numero_cartao']]['credito'] -= buy_request['valor_compra']
         else:
             raise CardNotExistsException()
+        '''
         
         response = GenericResponse(id, status=Status.SUCCESS.name, message="The transaction was successfully processed")
         return jsonify(GenericResponseSchema().dump(response)), HTTPStatus.OK, {"Content-Type": "application/json"}
