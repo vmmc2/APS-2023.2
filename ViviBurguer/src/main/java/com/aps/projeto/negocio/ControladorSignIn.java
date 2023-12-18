@@ -40,6 +40,7 @@ public class ControladorSignIn {
     return new SignInResponse()
         .setNome(conta.getNome())
         .setEmail(conta.getEmail())
+        .setCpf(conta.getCpf().getCpf())
         .setStatus(HttpStatus.OK)
         .setMessage("SignIn realizado com sucesso");
   }

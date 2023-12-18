@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public class SignInResponse {
   String nome;
   String email;
+  String cpf;
   String message;
   HttpStatus status;
 }

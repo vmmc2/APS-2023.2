@@ -15,6 +15,7 @@ type LoginContext = {
 export type LoginData = {
   nome: string;
   email: string;
+  cpf: string;
   token: string;
 };
 
@@ -28,6 +29,7 @@ export function LoginProvider({ children }: LoginContextProviderProps) {
   const [login, setLogin] = useLocalStorage<LoginData>("login", {
     nome: "",
     email: "",
+    cpf: "",
     token: "",
   });
 

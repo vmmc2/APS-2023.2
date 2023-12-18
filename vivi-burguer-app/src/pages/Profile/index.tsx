@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import DefaultPage from "../DefaultPage";
 import { useLogin } from "../../context/LoginContext";
 import {
@@ -13,10 +13,12 @@ import { Button } from "react-bootstrap";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
-import { deliveryAddresses, paymentCards } from "../../mock";
+import { deliveryAddresses } from "../../mock";
 import api from "../../services/api";
 import { showPromiseToast } from "../../utilities/toastWindow";
 import { useNavigate } from "react-router-dom";
+import { PaymentCard } from "../../types";
+import { useQueries, useQuery } from "@tanstack/react-query";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -28,6 +30,31 @@ function Profile() {
   const navigate = useNavigate();
   const { login, setLogin } = useLogin();
 
+  const [state, setState] = useState<PaymentCard[]>([]);
+  const { data, isLoading } = useQuery<any>({
+    queryKey: [
+      "cartao/get",
+      "GET",
+      { headers: { Authorization: login.token }, params: { cpf: login.cpf } },
+    ],
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (!isLoading) {
+      let paymentCards: PaymentCard[] = [];
+      data.forEach((element) => {
+        paymentCards.push({
+          name: element["titular"],
+          type: element["tipoCartao"],
+          lastNumbers: element["numero"].slice(-4),
+          issuer: element["bandeira"],
+        });
+      });
+      setState(paymentCards);
+    }
+  }, [data]);
+
   const [openCardRegister, setOpenCardRegister] = useState(false);
   const [cardRegisterState, setCardRegisterState] = useState({
     number: "",
@@ -35,7 +62,6 @@ function Profile() {
     cvc: "",
     name: "",
     focus: "",
-    cpf: "",
   });
 
   const [openDeleteAccount, setOpenDeleteAccount] = useState(false);
@@ -101,7 +127,7 @@ function Profile() {
           bandeira: "mastercard",
           dataValidade: cardRegisterState.expiry,
           tipoCartao: selectedPaymentMethod,
-          cpf: cardRegisterState.cpf,
+          cpf: login.cpf,
         },
         {
           headers: {
@@ -228,7 +254,6 @@ function Profile() {
                             cvc: "",
                             name: "",
                             focus: "",
-                            cpf: "",
                           });
                         }}
                       >
@@ -237,41 +262,48 @@ function Profile() {
                     </div>
                   </h3>
                   <div className="mt-5">
-                    {paymentCards.map((card) => (
-                      <div className="rounded-md bg-gray-50 px-6 py-5 mt-2 sm:flex sm:items-start sm:justify-between">
-                        <h4 className="sr-only">{card.issuer}</h4>
-                        <div className="sm:flex sm:items-start">
-                          <CreditCardIcon
-                            className="h-8 w-auto sm:h-6 sm:flex-shrink-0"
-                            viewBox="0 0 36 24"
-                            aria-hidden="true"
-                          ></CreditCardIcon>
-                          <div className="mt-3 sm:ml-4 sm:mt-0">
-                            <div className="text-sm font-medium text-gray-900">
-                              {card.name}
-                            </div>
-                            <div className="mt-1 text-sm text-gray-600 sm:flex sm:items-center">
-                              <div>
-                                {card.type === "credit"
-                                  ? "Credit Card"
-                                  : "Debit Card"}
+                    {isLoading ? (
+                      <div>Loading...</div>
+                    ) : (
+                      state.map((card) => (
+                        <div className="rounded-md bg-gray-50 px-6 py-5 mt-2 sm:flex sm:items-start sm:justify-between">
+                          <h4 className="sr-only">{card.issuer}</h4>
+                          <div className="sm:flex sm:items-start">
+                            <CreditCardIcon
+                              className="h-8 w-auto sm:h-6 sm:flex-shrink-0"
+                              viewBox="0 0 36 24"
+                              aria-hidden="true"
+                            ></CreditCardIcon>
+                            <div className="mt-3 sm:ml-4 sm:mt-0">
+                              <div className="text-sm font-medium text-gray-900">
+                                {card.name}
+                              </div>
+                              <div className="mt-1 text-sm text-gray-600 sm:flex sm:items-center">
+                                <div>
+                                  {card.type === "credit"
+                                    ? "Credit Card"
+                                    : "Debit Card"}
+                                </div>
+                              </div>
+                              <div className="mt-1 text-sm text-gray-600 sm:flex sm:items-center">
+                                <div>Ends in {card.lastNumbers}</div>
                               </div>
                             </div>
-                            <div className="mt-1 text-sm text-gray-600 sm:flex sm:items-center">
-                              <div>Ends in {card.lastNumbers}</div>
-                            </div>
+                          </div>
+                          <div className="mt-4 sm:ml-6 sm:mt-0 sm:flex-shrink-0">
+                            <button
+                              type="button"
+                              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            >
+                              <TrashIcon
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
+                            </button>
                           </div>
                         </div>
-                        <div className="mt-4 sm:ml-6 sm:mt-0 sm:flex-shrink-0">
-                          <button
-                            type="button"
-                            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                          >
-                            <TrashIcon className="h-5 w-5" aria-hidden="true" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -445,24 +477,6 @@ function Profile() {
                           ))}
                         </div>
                       </RadioGroup>
-
-                      <div className="mt-2">
-                        <label
-                          htmlFor="creditCardUserName"
-                          className="block text-sm font-medium text-gray-600"
-                        >
-                          CPF
-                        </label>
-                        <input
-                          type="text"
-                          name="cpf"
-                          className="mt-1 p-2 border rounded-md w-full"
-                          placeholder="xxx.xxx.xxx-xx"
-                          value={cardRegisterState.cpf}
-                          onChange={handleInputChange}
-                          onFocus={handleInputFocus}
-                        />
-                      </div>
                     </form>
                   </div>
                   <div className="mt-5 sm:mt-6">

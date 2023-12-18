@@ -4,6 +4,7 @@ import DefaultPage from "../DefaultPage";
 import api from "../../services/api";
 import { showPromiseToast } from "../../utilities/toastWindow";
 import { useLogin } from "../../context/LoginContext";
+import { Button } from "react-bootstrap";
 
 function Login() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ function Login() {
           setLogin({
             email: response.data["email"],
             nome: response.data["nome"],
+            cpf: response.data["cpf"],
             token: response.headers["authorization"],
           });
           navigate("/");
@@ -62,19 +64,15 @@ function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
+              <label className="block text-sm font-medium leading-6 text-gray-900">
                 Email address
               </label>
               <div className="mt-2">
                 <input
                   id="email"
                   name="email"
-                  type="email"
                   autoComplete="email"
                   onChange={changeHandler}
                   required
@@ -85,10 +83,7 @@ function Login() {
 
             <div>
               <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
+                <label className="block text-sm font-medium leading-6 text-gray-900">
                   Password
                 </label>
               </div>
@@ -105,15 +100,14 @@ function Login() {
             </div>
 
             <div>
-              <button
-                type="submit"
+              <Button
                 onClick={() => {
                   tryLogin();
                 }}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
-              </button>
+              </Button>
             </div>
           </form>
 

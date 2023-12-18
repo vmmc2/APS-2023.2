@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EfetuarCompraController {
   private final Fachada fachada;
   private final JwtTokenProvider jwtTokenProvider;
-  @PostMapping("/compra/efetuar")
+                                                                                                                                                  @PostMapping("/compra/efetuar")
   public ResponseEntity<Comprovante> efetuarCompra(@RequestHeader("Authorization") String Authorization, @RequestBody Compra compra) {
     if(!jwtTokenProvider.validateToken(Authorization.split(" ")[1])) {
       return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
