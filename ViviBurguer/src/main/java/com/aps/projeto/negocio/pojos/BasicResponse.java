@@ -1,5 +1,6 @@
 package com.aps.projeto.negocio.pojos;
 
+import com.aps.projeto.negocio.enumerators.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,5 +12,5 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class BasicResponse {
   private String message;
-  private HttpStatus status;
+  private Status status;
 }

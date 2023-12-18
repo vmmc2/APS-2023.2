@@ -1,9 +1,9 @@
-package com.aps.projeto.negocio.adapter;
+package com.aps.projeto.negocio.mapper;
 
 import com.aps.projeto.negocio.entity.Conta;
 import com.aps.projeto.negocio.entity.ContaDTO;
 
-public class ContaAdapter {
+public class ContaMapper {
   public static ContaDTO contaToContaDto(Conta conta) {
     return new ContaDTO.Builder()
         .nome(conta.getNome())

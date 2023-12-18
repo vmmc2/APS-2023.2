@@ -1,6 +1,7 @@
 package com.aps.projeto.negocio;
 
 import com.aps.projeto.negocio.entity.Conta;
+import com.aps.projeto.negocio.enumerators.Status;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,11 @@ public class ControladorRemoverCadastro {
       Conta conta = cadastroContas.validarCredenciaisConta(email, senha);
       if(conta != null) {
         cadastroContas.apagarConta(email);
-        return new BasicResponse(REMOVE_OK, HttpStatus.OK);
+        return new BasicResponse(REMOVE_OK, Status.OK);
       }
-      return new BasicResponse(REMOVE_FORBIDDEN, HttpStatus.FORBIDDEN);
+      return new BasicResponse(REMOVE_FORBIDDEN, Status.FORBIDDEN);
     } else {
-      return new BasicResponse(CONTA_NOT_FOUND, HttpStatus.NOT_FOUND);
+      return new BasicResponse(CONTA_NOT_FOUND, Status.NOT_FOUND);
     }
   }
 }

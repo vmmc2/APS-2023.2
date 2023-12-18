@@ -1,9 +1,12 @@
 package com.aps.projeto.comunicacao;
 
+import static com.aps.projeto.negocio.converter.StatusConverter.toHttpStatus;
+
+import com.aps.projeto.negocio.converter.StatusConverter;
 import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.Fachada;
 import com.aps.projeto.negocio.entity.CartaoDTO;
-import com.aps.projeto.negocio.adapter.CartaoAdapter;
+import com.aps.projeto.negocio.mapper.CartaoMapper;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.negocio.pojos.CPF;
 import com.aps.projeto.security.JwtTokenProvider;
@@ -31,7 +34,7 @@ public class AdicionarCartaoController {
       return new ResponseEntity<>("Acesso Negado", HttpStatus.FORBIDDEN);
     }
     BasicResponse response = fachada.adicionarCartao(cartao);
-    return new ResponseEntity<>(response.getMessage(), response.getStatus());
+    return new ResponseEntity<>(response.getMessage(), toHttpStatus(response.getStatus()));
   }
   @GetMapping("/cartao/get")
   public ResponseEntity<List<CartaoDTO>> exibirCartoes(@RequestHeader("Authorization") String Authorization, @RequestParam("cpf") CPF cpf) {
@@ -40,7 +43,7 @@ public class AdicionarCartaoController {
     }
     List<CartaoDTO> cartoes = fachada.exibirCartoes(cpf)
         .stream()
-        .map(CartaoAdapter::cartaoToCartaoDto)
+        .map(CartaoMapper::cartaoToCartaoDto)
         .collect(Collectors.toList());
 
     if (cartoes.isEmpty()) {

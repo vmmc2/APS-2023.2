@@ -1,6 +1,9 @@
 package com.aps.projeto.comunicacao;
 
+import static com.aps.projeto.negocio.converter.StatusConverter.toHttpStatus;
+
 import com.aps.projeto.negocio.Fachada;
+import com.aps.projeto.negocio.converter.StatusConverter;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,6 @@ public class RemoverCadastroController {
       return new ResponseEntity<>("Acesso Negado", HttpStatus.FORBIDDEN);
     }
     BasicResponse response = fachada.removerConta(email, senha);
-    return new ResponseEntity<>(response.getMessage(), response.getStatus());
+    return new ResponseEntity<>(response.getMessage(), toHttpStatus(response.getStatus()));
   }
 }

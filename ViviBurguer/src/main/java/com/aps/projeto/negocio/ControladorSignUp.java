@@ -1,6 +1,7 @@
 package com.aps.projeto.negocio;
 
 import com.aps.projeto.negocio.entity.Conta;
+import com.aps.projeto.negocio.enumerators.Status;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,10 @@ public class ControladorSignUp {
     public BasicResponse efetuarSignUp(Conta conta) {
         if(!cadastroContas.existeConta(conta.getEmail())) {
             boolean status = cadastroContas.registrarConta(conta);
-            return status ? new BasicResponse(CADASTRO_SUCESSO, HttpStatus.CREATED) :
-                new BasicResponse(CADASTRO_FALHA, HttpStatus.INTERNAL_SERVER_ERROR);
+            return status ? new BasicResponse(CADASTRO_SUCESSO, Status.OK) :
+                new BasicResponse(CADASTRO_FALHA, Status.INTERNAL_ERROR);
         } else {
-            return new BasicResponse(CADASTRO_EXISTE, HttpStatus.BAD_REQUEST);
+            return new BasicResponse(CADASTRO_EXISTE, Status.BAD_REQUEST);
         }
     }
 
