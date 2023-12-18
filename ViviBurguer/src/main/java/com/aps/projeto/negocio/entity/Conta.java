@@ -1,4 +1,4 @@
-package com.aps.projeto.negocio;
+package com.aps.projeto.negocio.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +21,7 @@ public class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nome;
+    @Column(unique = true)
     private String cpf;
     private String telefone;
     @Column(unique = true)

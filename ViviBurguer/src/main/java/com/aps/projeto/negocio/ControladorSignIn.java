@@ -1,5 +1,6 @@
 package com.aps.projeto.negocio;
 
+import com.aps.projeto.negocio.entity.Conta;
 import com.aps.projeto.negocio.pojos.SignInResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

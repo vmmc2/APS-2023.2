@@ -1,6 +1,6 @@
 package com.aps.projeto.dados;
 
-import com.aps.projeto.negocio.Conta;
+import com.aps.projeto.negocio.entity.Conta;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

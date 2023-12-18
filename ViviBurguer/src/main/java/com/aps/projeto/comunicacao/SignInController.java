@@ -24,8 +24,9 @@ public class SignInController {
     SignInResponse signInResponse = fachada.efetuarSignIn(email, senha);
     String token = jwtTokenProvider.generateToken(email);
     HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + token);
-    return new ResponseEntity<>(signInResponse, headers, HttpStatus.OK);
-
+    if(signInResponse.getStatus().equals(HttpStatus.OK)) {
+      headers.add("Authorization", "Bearer " + token);
+    }
+    return new ResponseEntity<>(signInResponse, headers, signInResponse.getStatus());
   }
 }

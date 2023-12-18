@@ -1,7 +1,11 @@
 package com.aps.projeto.negocio;
 
+import com.aps.projeto.negocio.entity.Cartao;
+import com.aps.projeto.negocio.entity.Conta;
+import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.negocio.pojos.SignInResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -10,8 +14,9 @@ public class Fachada {
     private final ControladorSignUp controladorSignUp;
     private final ControladorSignIn controladorSignIn;
     private final ControladorRemoverCadastro controladorRemoverCadastro;
+    private final ControldorAdicionarCartao controldorAdicionarCartao;
 
-    public String efetuarSignUp(Conta conta) {
+    public BasicResponse efetuarSignUp(Conta conta) {
         return controladorSignUp.efetuarSignUp(conta);
     }
 
@@ -23,7 +28,12 @@ public class Fachada {
         return controladorSignIn.efetuarSignIn(email, senha);
     }
 
-    public String removerConta(String email, String senha) {
+    public BasicResponse removerConta(String email, String senha) {
         return controladorRemoverCadastro.removerConta(email, senha);
+    }
+
+    public BasicResponse adicionarCartao(Cartao cartao) {
+        return controldorAdicionarCartao.adicionarCartao(cartao);
+
     }
 }

@@ -1,6 +1,9 @@
 package com.aps.projeto.negocio;
 
+import com.aps.projeto.negocio.entity.Conta;
+import com.aps.projeto.negocio.pojos.BasicResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,12 +14,13 @@ public class ControladorSignUp {
     private static final  String CADASTRO_FALHA = "Não foi possível cadastrar a conta";
     private static final  String CADASTRO_EXISTE = "Conta já existe";
 
-    public String efetuarSignUp(Conta conta) {
+    public BasicResponse efetuarSignUp(Conta conta) {
         if(!cadastroContas.existeConta(conta.getEmail())) {
             boolean status = cadastroContas.registrarConta(conta);
-            return status ? CADASTRO_SUCESSO : CADASTRO_FALHA;
+            return status ? new BasicResponse(CADASTRO_SUCESSO, HttpStatus.CREATED) :
+                new BasicResponse(CADASTRO_FALHA, HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            return CADASTRO_EXISTE;
+            return new BasicResponse(CADASTRO_EXISTE, HttpStatus.BAD_REQUEST);
         }
     }
 

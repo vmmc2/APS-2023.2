@@ -1,6 +1,9 @@
 package com.aps.projeto.negocio;
 
+import com.aps.projeto.negocio.entity.Conta;
+import com.aps.projeto.negocio.pojos.BasicResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,16 +14,16 @@ public class ControladorRemoverCadastro {
   private static final String REMOVE_OK = "Conta deletada!";
 
   private final CadastroContas cadastroContas;
-  public String removerConta(String email, String senha) {
+  public BasicResponse removerConta(String email, String senha) {
     if(cadastroContas.existeConta(email)) {
       Conta conta = cadastroContas.validarCredenciaisConta(email, senha);
       if(conta != null) {
         cadastroContas.apagarConta(email);
-        return REMOVE_OK;
+        return new BasicResponse(REMOVE_OK, HttpStatus.OK);
       }
-      return REMOVE_FORBIDDEN;
+      return new BasicResponse(REMOVE_FORBIDDEN, HttpStatus.FORBIDDEN);
     } else {
-      return CONTA_NOT_FOUND;
+      return new BasicResponse(CONTA_NOT_FOUND, HttpStatus.NOT_FOUND);
     }
   }
 }
