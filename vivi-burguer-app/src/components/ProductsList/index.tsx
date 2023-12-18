@@ -3,6 +3,7 @@ import React from "react";
 import { formatCurrency } from "../../utilities/currencyFormatter";
 import { Button } from "react-bootstrap";
 import { CartItem, useShoppingCart } from "../../context/ShoppingCartContext";
+import { useLogin } from "../../context/LoginContext";
 
 export interface ProductsListProps {
   products: CartItem[];
@@ -11,6 +12,7 @@ export interface ProductsListProps {
 function ProductsList({ products }: ProductsListProps): JSX.Element {
   const { getItemQuantity, increaseCartQuantity, decreaseCartQuantity } =
     useShoppingCart();
+  const { isLogged } = useLogin();
   return (
     <ul
       role="list"
@@ -43,8 +45,9 @@ function ProductsList({ products }: ProductsListProps): JSX.Element {
             <div className="-mt-px flex divide-x divide-gray-200">
               {getItemQuantity(product) === 0 ? (
                 <Button
+                  disabled={isLogged() === false}
                   onClick={() => increaseCartQuantity(product)}
-                  className="flex w-0 flex-1 group hover:bg-[#16a34a] justify-center items-center gap-x-3 py-4 text-sm font-semibold text-gray-900 rounded-b-lg border border-transparent"
+                  className="flex w-0 flex-1 group hover:bg-[#16a34a] justify-center items-center gap-x-3 py-4 text-sm font-semibold text-gray-900 rounded-b-lg border border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ShoppingCartIcon
                     className="h-5 w-5 text-black group-hover:text-white"

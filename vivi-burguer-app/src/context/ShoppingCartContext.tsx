@@ -30,6 +30,7 @@ type ShoppingCartContext = {
   decreaseCartQuantity: (cartItem: CartItem) => void;
   removeFromCart: (cartItem: CartItem) => void;
   getTotalFromCart: () => number;
+  eraseCart: () => void;
   cartQuantity: number;
   cartItems: CartItem[];
 };
@@ -106,6 +107,10 @@ export function ShoppingCartProvider({
     );
   }
 
+  function eraseCart() {
+    setCartItems([]);
+  }
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -116,6 +121,7 @@ export function ShoppingCartProvider({
         decreaseCartQuantity,
         removeFromCart,
         getTotalFromCart,
+        eraseCart,
         cartQuantity,
         cartItems,
       }}

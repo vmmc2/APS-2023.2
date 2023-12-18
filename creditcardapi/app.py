@@ -5,6 +5,7 @@ from http import HTTPStatus
 from data.BuyRequest import *
 from data.CreditCard import *
 from data.DebitCard import *
+from data.ValidateCard import *
 from data.response.GenericResponse import *
 from data.response.GetCardsResponse import *
 from data.enum.Enums import *
@@ -22,7 +23,7 @@ from exceptions.generic.NotFoundException import NotFoundException
 
 from filter.CardFilter import CardFilter
 
-from validator.CardValidator import CardValidator
+from validator.CardValidator import CardValidator, NewCardValidator
 
 app = Flask(__name__)
 registered_cards = {PaymentMethod.CREDIT_CARD: dict(), PaymentMethod.DEBIT_CARD: dict()}
@@ -94,6 +95,31 @@ def register_debit_card():
     
     except Exception as e:
         return jsonify(GenericResponseSchema().dump(GenericResponse(id=id, status=Status.ERROR.name, error=str(e)))), HTTPStatus.INTERNAL_SERVER_ERROR
+
+@app.route('/validate', methods=['POST'])
+def validate_card():
+    # Generate a random ID for the response
+    id = str(uuid.uuid4())
+
+    try:
+        request_data = request.get_json()
+        validate_request = ValidateRequestSchema().load(request_data)
+
+        if not NewCardValidator(validate_request).validate():
+            raise BadRequestException(message="The given card is invalid")
+        
+        response = GenericResponse(id, status=Status.SUCCESS.name, message="The card is valid")
+        return jsonify(GenericResponseSchema().dump(response)), HTTPStatus.OK, {"Content-Type": "application/json"}
+    
+    except ValidationError as e:
+        return jsonify(GenericResponseSchema().dump(GenericResponse(id=id, status=Status.ERROR.name, error=str(e)))), HTTPStatus.BAD_REQUEST
+    
+    except BadRequestException as e:
+        return jsonify(GenericResponseSchema().dump(GenericResponse(id=id, status=Status.ERROR.name, error=str(e)))), HTTPStatus.BAD_REQUEST
+    
+    except Exception as e:
+        return jsonify(GenericResponseSchema().dump(GenericResponse(id=id, status=Status.ERROR.name, error=str(e)))), HTTPStatus.INTERNAL_SERVER_ERROR
+    
 
 @app.route('/buy', methods=['POST'])
 def buy_with_card():

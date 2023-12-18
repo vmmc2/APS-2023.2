@@ -1,29 +1,38 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DefaultPage from "../DefaultPage";
-import axios from "axios";
 import api from "../../services/api";
-import { toast } from "react-toastify";
-import {
-  showFailToast,
-  showPromiseToast,
-  showSuccessToast,
-} from "../../utilities/toastWindow";
+import { showPromiseToast } from "../../utilities/toastWindow";
 import { useLogin } from "../../context/LoginContext";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
-    password: "",
+    senha: "",
   });
 
   const { setLogin } = useLogin();
-  const [post, setPost] = React.useState(null);
 
   function tryLogin() {
-    const promise = api.post("login", form).then((response) => {
-      setPost(response.data);
-    });
+    const promise = api
+      .post("conta/signIn", null, {
+        params: {
+          email: form["email"],
+          senha: form["senha"],
+        },
+      })
+      .then((response) => {
+        if (response.data["email"] === form["email"]) {
+          setLogin({
+            email: response.data["email"],
+            nome: response.data["nome"],
+            token: response.headers["authorization"],
+          });
+          navigate("/");
+        }
+      });
     showPromiseToast(
       {
         pending: "Logging in...",
@@ -85,11 +94,10 @@ function Login() {
               </div>
               <div className="mt-2">
                 <input
-                  id="password"
-                  name="password"
+                  id="senha"
+                  name="senha"
                   type="password"
                   onChange={changeHandler}
-                  autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />

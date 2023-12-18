@@ -13,8 +13,9 @@ type LoginContext = {
 };
 
 export type LoginData = {
-  name: string;
+  nome: string;
   email: string;
+  token: string;
 };
 
 const LoginContext = createContext({} as LoginContext);
@@ -25,12 +26,13 @@ export function useLogin() {
 
 export function LoginProvider({ children }: LoginContextProviderProps) {
   const [login, setLogin] = useLocalStorage<LoginData>("login", {
-    name: "",
+    nome: "",
     email: "",
+    token: "",
   });
 
   function isLogged() {
-    return false;
+    return login.nome !== "" && login.email !== "" && login.token !== "";
   }
 
   return (

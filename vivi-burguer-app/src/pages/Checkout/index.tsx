@@ -20,6 +20,7 @@ import { CheckCircleIcon, TrashIcon } from "@heroicons/react/20/solid";
 import DefaultPage from "../DefaultPage";
 import { formatCurrency } from "../../utilities/currencyFormatter";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
+import { deliveryAddresses, paymentCards } from "../../mock";
 
 const products = [
   {
@@ -34,40 +35,6 @@ const products = [
     imageAlt: "Front of men's Basic Tee in black.",
   },
   // More products...
-];
-
-const deliveryAddresses = [
-  {
-    id: 1,
-    name: "Casa",
-    address: "Rua Mauricea",
-    complement: "474, Apto. 55",
-    zipcode: "50670-480",
-  },
-  {
-    id: 2,
-    name: "Casa do PRIMO",
-    address: "Rua Mauricea",
-    complement: "474, Apto. DO PRIMO",
-    zipcode: "50670-480",
-  },
-];
-
-const paymentCards = [
-  {
-    id: 1,
-    title: "Card 01",
-    type: "credit",
-    issuer: "mastercard",
-    number: "**** 0001",
-  },
-  {
-    id: 2,
-    title: "Card 02",
-    type: "debit",
-    issuer: "visa",
-    number: "**** 0002",
-  },
 ];
 
 function classNames(...classes) {
@@ -104,9 +71,9 @@ export default function Checkout() {
                     </RadioGroup.Label>
 
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                      {deliveryAddresses.map((deliveryAddress) => (
+                      {deliveryAddresses.map((deliveryAddress, index) => (
                         <RadioGroup.Option
-                          key={deliveryAddress.id}
+                          key={index}
                           value={deliveryAddress}
                           className={({ checked, active }) =>
                             classNames(
@@ -187,9 +154,9 @@ export default function Checkout() {
                     onChange={setSelectedPaymentCard}
                   >
                     <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                      {paymentCards.map((paymentCard) => (
+                      {paymentCards.map((paymentCard, index) => (
                         <RadioGroup.Option
-                          key={paymentCard.id}
+                          key={index}
                           value={paymentCard}
                           className={({ checked, active }) =>
                             classNames(
@@ -209,7 +176,7 @@ export default function Checkout() {
                                     as="span"
                                     className="block text-sm font-medium text-gray-900"
                                   >
-                                    {paymentCard.title}
+                                    {paymentCard.name}
                                   </RadioGroup.Label>
                                   <RadioGroup.Description
                                     as="span"
@@ -223,7 +190,7 @@ export default function Checkout() {
                                     as="span"
                                     className="mt-1 flex items-center text-sm text-gray-500"
                                   >
-                                    {paymentCard.number}
+                                    Ends in {paymentCard.lastNumbers}
                                   </RadioGroup.Description>
                                   <RadioGroup.Label>
                                     <svg
