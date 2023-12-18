@@ -35,6 +35,7 @@ function Profile() {
     cvc: "",
     name: "",
     focus: "",
+    cpf: "",
   });
 
   const [openDeleteAccount, setOpenDeleteAccount] = useState(false);
@@ -88,6 +89,38 @@ function Profile() {
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [event.currentTarget.name]: event.currentTarget.value });
   };
+
+  function tryRegisterCard() {
+    const promise = api
+      .post(
+        "cartao/adicionar",
+        {
+          numero: cardRegisterState.number,
+          cvv: cardRegisterState.cvc,
+          titular: cardRegisterState.name,
+          bandeira: "mastercard",
+          dataValidade: cardRegisterState.expiry,
+          tipoCartao: selectedPaymentMethod,
+          cpf: cardRegisterState.cpf,
+        },
+        {
+          headers: {
+            Authorization: login.token,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+      });
+    showPromiseToast(
+      {
+        pending: "Trying to register card...",
+        success: "Successfully registered card",
+        error: "Register card failed",
+      },
+      promise
+    );
+  }
 
   return (
     <>
@@ -195,6 +228,7 @@ function Profile() {
                             cvc: "",
                             name: "",
                             focus: "",
+                            cpf: "",
                           });
                         }}
                       >
@@ -411,13 +445,34 @@ function Profile() {
                           ))}
                         </div>
                       </RadioGroup>
+
+                      <div className="mt-2">
+                        <label
+                          htmlFor="creditCardUserName"
+                          className="block text-sm font-medium text-gray-600"
+                        >
+                          CPF
+                        </label>
+                        <input
+                          type="text"
+                          name="cpf"
+                          className="mt-1 p-2 border rounded-md w-full"
+                          placeholder="xxx.xxx.xxx-xx"
+                          value={cardRegisterState.cpf}
+                          onChange={handleInputChange}
+                          onFocus={handleInputFocus}
+                        />
+                      </div>
                     </form>
                   </div>
                   <div className="mt-5 sm:mt-6">
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      onClick={() => setOpenCardRegister(false)}
+                      onClick={() => {
+                        tryRegisterCard();
+                        setOpenCardRegister(false);
+                      }}
                     >
                       Register card
                     </button>
