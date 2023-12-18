@@ -24,6 +24,9 @@ import { deliveryAddresses, paymentCards } from "../../mock";
 import { PaymentCard } from "../../types";
 import { useQuery } from "@tanstack/react-query";
 import { useLogin } from "../../context/LoginContext";
+import { Button } from "react-bootstrap";
+import api from "../../services/api";
+import { showPromiseToast } from "../../utilities/toastWindow";
 
 const products = [
   {
@@ -49,10 +52,9 @@ export default function Checkout() {
   const [selectedDeliveryAddress, setSelectedDeliveryAddress] = useState(
     deliveryAddresses[0]
   );
-  const [selectedPaymentCard, setSelectedPaymentCard] = useState(
-    paymentCards[0]
-  );
-  const { cartItems, removeFromCart, getTotalFromCart } = useShoppingCart();
+  const [selectedPaymentCard, setSelectedPaymentCard] = useState<PaymentCard>();
+  const { cartItems, removeFromCart, getTotalFromCart, eraseCart } =
+    useShoppingCart();
 
   const [state, setState] = useState<PaymentCard[]>([]);
   const { data, isLoading } = useQuery<any>({
@@ -71,13 +73,65 @@ export default function Checkout() {
         paymentCards.push({
           name: element["titular"],
           type: element["tipoCartao"],
+          fullNumber: element["numero"],
           lastNumbers: element["numero"].slice(-4),
           issuer: element["bandeira"],
+          expirationDate: element["dataValidade"],
+          cvv: element["cvv"],
         });
       });
       setState(paymentCards);
+      if (paymentCards.length > 0) {
+        setSelectedPaymentCard(paymentCards[0]);
+      }
     }
   }, [data]);
+
+  function tryBuy() {
+    const promise = api
+      .post(
+        "compra/efetuar",
+        {
+          cartao: {
+            numero: selectedPaymentCard?.fullNumber,
+            cvv: selectedPaymentCard?.cvv,
+            titular: selectedPaymentCard?.name,
+            dataValidade: selectedPaymentCard?.expirationDate,
+            bandeira: selectedPaymentCard?.issuer,
+            tipoCartao:
+              selectedPaymentCard?.type === "credit" ? "CREDITO" : "DEBITO",
+            cpf: login.cpf,
+          },
+          carrinho: {
+            itens: cartItems.map((item) => {
+              return {
+                nome: item.name,
+                preco: item.price,
+                quantidade: item.quantity,
+              };
+            }),
+          },
+        },
+        {
+          headers: {
+            Authorization: login.token,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          eraseCart();
+        }
+      });
+    showPromiseToast(
+      {
+        pending: "Trying to order...",
+        success: "Successfully ordered",
+        error: "Order failed",
+      },
+      promise
+    );
+  }
 
   return (
     <DefaultPage>
@@ -346,13 +400,15 @@ export default function Checkout() {
                   </dl>
 
                   <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                    <button
-                      type="submit"
-                      disabled={cartItems.length === 0}
+                    <Button
+                      onClick={() => {
+                        tryBuy();
+                      }}
+                      disabled={cartItems.length === 0 || state.length === 0}
                       className="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Confirm order
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>
