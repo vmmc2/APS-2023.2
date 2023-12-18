@@ -55,7 +55,7 @@ class NewCardValidator:
     def validate_expiration_date(self):
         # Expiration date should be in the format MM/YYYY
         try:
-            expiration_date = datetime.strptime(self.expiration_date, "%m/%Y")
+            expiration_date = datetime.strptime(self.expiration_date, "%Y-%m")
             current_date = datetime.now()
             return expiration_date > current_date
         except ValueError:
