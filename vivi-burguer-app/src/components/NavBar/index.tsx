@@ -6,13 +6,14 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useShoppingCart } from "../../context/ShoppingCartContext";
 import { useLogin } from "../../context/LoginContext";
 
 const navigation = [
-  { id: 1, name: "Products", href: "/products/", current: false },
+  { id: 1, name: "Home", href: "/", current: false },
+  { id: 2, name: "Products", href: "/products/", current: false },
 ];
 
 function classNames(...classes) {
@@ -20,9 +21,11 @@ function classNames(...classes) {
 }
 
 export default function NavBar() {
+  const navigate = useNavigate();
   const currentPath = useLocation().pathname;
   const selectedItemValue: { [key: string]: number } = {
-    "/products/": 1,
+    "/": 1,
+    "/products/": 2,
   };
 
   function getSelectedItemValue() {
@@ -39,8 +42,8 @@ export default function NavBar() {
     }
   }, [currentPath]);
 
-  const { cartQuantity, openCart } = useShoppingCart();
-  const { isLogged } = useLogin();
+  const { cartQuantity, openCart, eraseCart } = useShoppingCart();
+  const { isLogged, setLogin } = useLogin();
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -139,51 +142,44 @@ export default function NavBar() {
                       <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
+                            <Link
+                              to="/profile"
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Your Profile
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                         <Menu.Item>
                           {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Settings
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
+                            <Link
+                              to="/login"
+                              onClick={() => {
+                                setLogin({ email: "", nome: "", token: "" });
+                                eraseCart();
+                              }}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
                               Sign out
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       </Menu.Items>
                     </Transition>
                   </Menu>
                 ) : (
-                  <div className="relative ml-3">
-                    <Button className="bg-blue-700 hover:bg-blue-800 text-white font-bold py-1 px-3 rounded btn btn-primary">
-                      <Link to="/login">Login</Link>
-                    </Button>
+                  <div className="flex relative ml-3">
+                    <button className="flex relative bg-blue-700 w-full h-full hover:bg-blue-800 text-white font-bold py-1 px-3 rounded btn btn-primary">
+                      <Link className="flex relative w-full h-full" to="/login">
+                        Login
+                      </Link>
+                    </button>
                   </div>
                 )}
               </div>

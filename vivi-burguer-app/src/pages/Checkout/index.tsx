@@ -39,17 +39,10 @@ const products = [
 const deliveryAddresses = [
   {
     id: 1,
-    name: "Casa",
-    address: "Rua Mauricea",
-    complement: "474, Apto. 55",
-    zipcode: "50670-480",
-  },
-  {
-    id: 2,
-    name: "Casa do PRIMO",
-    address: "Rua Mauricea",
-    complement: "474, Apto. DO PRIMO",
-    zipcode: "50670-480",
+    name: "Nome do Endereço 01",
+    address: "Rua Frederico Moura, Franca - SP",
+    complement: "Complemento do Endereço 01",
+    zipcode: "14401-150",
   },
 ];
 

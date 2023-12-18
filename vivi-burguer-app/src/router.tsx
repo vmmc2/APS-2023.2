@@ -11,6 +11,7 @@ import Register from "./pages/Register";
 import { LoginProvider } from "./context/LoginContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Profile from "./pages/Profile";
 
 const Default = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
       children: [
         { path: "/", element: <Home /> },
         { path: "/login", element: <Login /> },
+        { path: "/profile", element: <Profile /> },
         { path: "/register", element: <Register /> },
         { path: "/products", element: <Products /> },
         { path: "/checkout", element: <Checkout /> },
