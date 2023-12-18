@@ -32,7 +32,6 @@ public class Cartao {
   private YearMonth dataValidade;
   private String bandeira;
   private String tipoCartao;
-  @Column(unique = true)
   @Convert(converter = CPFConverter.class)
   private CPF cpf;
   public static class Builder {
