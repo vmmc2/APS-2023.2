@@ -16,13 +16,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ComunicacaoOperadoraCartaoAdapter {
+public class ComunicacaoOperadoraCartaoAdapter implements IComunicacaoOperadoraCartaoAdapter{
   private final ComunicacaoOperadoraCartao comunicacaoOperadoraCartao;
+  @Override
   public boolean existeCartao(Cartao cartao) {
     ResponseEntity<String> response = comunicacaoOperadoraCartao.existeCartao(cartaoToCartaoDto(cartao));
     return response.getStatusCode().is2xxSuccessful();
   }
-
+  @Override
   public Comprovante efetuarCompra(Cartao cartao, BigDecimal valorCompra) {
     PagamentoOperadoraCartao pagamento = new PagamentoOperadoraCartao.Builder()
         .numeroCartao(cartao.getNumero())
