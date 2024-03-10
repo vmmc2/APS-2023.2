@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ControladorEfetuarCompra {
+public class ControladorEfetuarPagamento {
   private final IComunicacaoOperadoraCartaoAdapter iComunicacaoOperadoraCartaoAdapter;
-  public Comprovante efetuarCompra(Cartao cartao, Carrinho carrinho) {
-    return iComunicacaoOperadoraCartaoAdapter.efetuarCompra(cartao, carrinho.getValorCompra());
+  public Comprovante efetuarPagamento(Cartao cartao, Carrinho carrinho) {
+    return iComunicacaoOperadoraCartaoAdapter.efetuarPagamento(cartao, carrinho.getValorPagamento(), carrinho.getItens());
   }
 }

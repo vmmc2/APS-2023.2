@@ -2,7 +2,6 @@ package com.aps.projeto.negocio;
 
 import com.aps.projeto.negocio.entity.Carrinho;
 import com.aps.projeto.negocio.entity.Cartao;
-import com.aps.projeto.negocio.entity.CartaoDTO;
 import com.aps.projeto.negocio.entity.Comprovante;
 import com.aps.projeto.negocio.entity.Conta;
 import com.aps.projeto.negocio.pojos.BasicResponse;
@@ -10,7 +9,6 @@ import com.aps.projeto.negocio.pojos.CPF;
 import com.aps.projeto.negocio.pojos.SignInResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -20,7 +18,7 @@ public class Fachada {
     private final ControladorSignIn controladorSignIn;
     private final ControladorRemoverCadastro controladorRemoverCadastro;
     private final ControldorAdicionarCartao controldorAdicionarCartao;
-    private final ControladorEfetuarCompra controladorEfetuarCompra;
+    private final ControladorEfetuarPagamento controladorEfetuarPagamento;
 
     public BasicResponse efetuarSignUp(Conta conta) {
         return controladorSignUp.efetuarSignUp(conta);
@@ -47,7 +45,7 @@ public class Fachada {
         return controldorAdicionarCartao.exibirCartoes(cpf);
     }
 
-    public Comprovante efetuarCompra(Cartao cartao, Carrinho carrinho) {
-        return controladorEfetuarCompra.efetuarCompra(cartao, carrinho);
+    public Comprovante efetuarPagamento(Cartao cartao, Carrinho carrinho) {
+        return controladorEfetuarPagamento.efetuarPagamento(cartao, carrinho);
     }
 }

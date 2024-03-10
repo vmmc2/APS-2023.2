@@ -9,6 +9,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import lombok.AllArgsConstructor;
@@ -26,12 +30,33 @@ public class Cartao {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
+
+  @NotNull
+  @Size(min = 16, max = 16)
+  @Pattern(regexp = "\\d+", message = "O número do cartão deve conter apenas dígitos")
   private String numero;
+
+  @NotNull
+  @Size(min = 3, max = 3)
+  @Pattern(regexp = "\\d+", message = "O CVV deve conter apenas dígitos")
   private String cvv;
+
+  @NotBlank
+  @Size(max = 255)
   private String titular;
+
+  @NotBlank
   private YearMonth dataValidade;
+
+  @NotBlank
+  @Size(max = 255)
   private String bandeira;
+
+  @NotBlank
+  @Size(max = 255)
   private String tipoCartao;
+
+  @NotNull
   @Convert(converter = CPFConverter.class)
   private CPF cpf;
   public static class Builder {

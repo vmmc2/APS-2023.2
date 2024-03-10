@@ -1,6 +1,5 @@
 package com.aps.projeto.negocio.entity;
 
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Compra {
+public class Pagamento {
   private Cartao cartao;
   private Carrinho carrinho;
 }

@@ -1,8 +1,7 @@
 package com.aps.projeto.comunicacao;
 
 import com.aps.projeto.negocio.Fachada;
-import com.aps.projeto.negocio.entity.Cartao;
-import com.aps.projeto.negocio.entity.Compra;
+import com.aps.projeto.negocio.entity.Pagamento;
 import com.aps.projeto.negocio.entity.Comprovante;
 import com.aps.projeto.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class EfetuarCompraController {
+public class EfetuarPagamentoController {
   private final Fachada fachada;
   private final JwtTokenProvider jwtTokenProvider;
-                                                                                                                                                  @PostMapping("/compra/efetuar")
-  public ResponseEntity<Comprovante> efetuarCompra(@RequestHeader("Authorization") String Authorization, @RequestBody Compra compra) {
+  @PostMapping("/compra/efetuar")
+  public ResponseEntity<Comprovante> efetuarPagamento(@RequestHeader("Authorization") String Authorization, @RequestBody Pagamento pagamento) {
     if(!jwtTokenProvider.validateToken(Authorization.split(" ")[1])) {
       return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
     }
-    Comprovante comprovante = fachada.efetuarCompra(compra.getCartao(), compra.getCarrinho());
+    Comprovante comprovante = fachada.efetuarPagamento(pagamento.getCartao(), pagamento.getCarrinho());
     return ResponseEntity.ok(comprovante);
   }
 }

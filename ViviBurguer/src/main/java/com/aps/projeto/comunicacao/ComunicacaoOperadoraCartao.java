@@ -1,10 +1,9 @@
 package com.aps.projeto.comunicacao;
-import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.entity.CartaoDTO;
 import com.aps.projeto.negocio.entity.Comprovante;
 import com.aps.projeto.negocio.entity.PagamentoOperadoraCartao;
 
-import java.math.BigDecimal;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -36,7 +35,7 @@ public class ComunicacaoOperadoraCartao {
     return restTemplate.postForEntity(url, request, String.class);
   }
 
-  public ResponseEntity<Comprovante> efetuarCompra(PagamentoOperadoraCartao pagamento) {
+  public ResponseEntity<Comprovante> efetuarPagamento(PagamentoOperadoraCartao pagamento) {
     String url = endpoint + BUY_PATH;
 
     HttpHeaders headers = new HttpHeaders();
@@ -45,5 +44,9 @@ public class ComunicacaoOperadoraCartao {
     HttpEntity<PagamentoOperadoraCartao> request = new HttpEntity<>(pagamento, headers);
 
     return restTemplate.postForEntity(url, request, Comprovante.class);
+    //Comprovante comprovante = new Comprovante();
+    //comprovante.setId(UUID.randomUUID());
+    //comprovante.setMessage("");
+    //return ResponseEntity.ok(comprovante);
   }
 }
