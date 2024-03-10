@@ -19,9 +19,9 @@ public class SignUpController {
     private final Fachada fachada;
 
     @PostMapping("/conta/signUp")
-    public ResponseEntity<String> efetuarSignUp(@RequestBody Conta conta) {
+    public ResponseEntity<BasicResponse> efetuarSignUp(@RequestBody Conta conta) {
         BasicResponse response = fachada.efetuarSignUp(conta);
-        return new ResponseEntity<>(response.getMessage(), toHttpStatus(response.getStatus()));
+        return new ResponseEntity<>(response, toHttpStatus(response.getStatus()));
     }
 
     @GetMapping("/conta/get")

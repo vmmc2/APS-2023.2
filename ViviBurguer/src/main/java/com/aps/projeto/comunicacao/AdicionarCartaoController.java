@@ -6,6 +6,7 @@ import com.aps.projeto.negocio.converter.StatusConverter;
 import com.aps.projeto.negocio.entity.Cartao;
 import com.aps.projeto.negocio.Fachada;
 import com.aps.projeto.negocio.entity.CartaoDTO;
+import com.aps.projeto.negocio.enumerators.Status;
 import com.aps.projeto.negocio.mapper.CartaoMapper;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.negocio.pojos.CPF;
@@ -29,12 +30,12 @@ public class AdicionarCartaoController {
   private final JwtTokenProvider jwtTokenProvider;
 
   @PostMapping("/cartao/adicionar")
-  public ResponseEntity<String> adicionarCartao(@RequestHeader("Authorization") String Authorization, @RequestBody Cartao cartao) {
+  public ResponseEntity<BasicResponse> adicionarCartao(@RequestHeader("Authorization") String Authorization, @RequestBody Cartao cartao) {
     if(!jwtTokenProvider.validateToken(Authorization.split(" ")[1])) {
-      return new ResponseEntity<>("Acesso Negado", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>(new BasicResponse("Acesso Negado", Status.FORBIDDEN), HttpStatus.FORBIDDEN);
     }
     BasicResponse response = fachada.adicionarCartao(cartao);
-    return new ResponseEntity<>(response.getMessage(), toHttpStatus(response.getStatus()));
+    return new ResponseEntity<>(response, toHttpStatus(response.getStatus()));
   }
   @GetMapping("/cartao/get")
   public ResponseEntity<List<CartaoDTO>> exibirCartoes(@RequestHeader("Authorization") String Authorization, @RequestParam("cpf") CPF cpf) {

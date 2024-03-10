@@ -4,6 +4,7 @@ import static com.aps.projeto.negocio.converter.StatusConverter.toHttpStatus;
 
 import com.aps.projeto.negocio.Fachada;
 import com.aps.projeto.negocio.converter.StatusConverter;
+import com.aps.projeto.negocio.enumerators.Status;
 import com.aps.projeto.negocio.pojos.BasicResponse;
 import com.aps.projeto.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +21,11 @@ public class RemoverCadastroController {
   private final Fachada fachada;
   private final JwtTokenProvider jwtTokenProvider;
   @DeleteMapping("/conta/remover")
-  public ResponseEntity<String> removerConta(@RequestHeader("Authorization") String Authorization, @RequestParam("email") String email, @RequestParam("senha") String senha) {
+  public ResponseEntity<BasicResponse> removerConta(@RequestHeader("Authorization") String Authorization, @RequestParam("email") String email, @RequestParam("senha") String senha) {
     if(!jwtTokenProvider.validateToken(Authorization.split(" ")[1])) {
-      return new ResponseEntity<>("Acesso Negado", HttpStatus.FORBIDDEN);
+      return new ResponseEntity<>(new BasicResponse("Acesso Negado", Status.FORBIDDEN), HttpStatus.FORBIDDEN);
     }
     BasicResponse response = fachada.removerConta(email, senha);
-    return new ResponseEntity<>(response.getMessage(), toHttpStatus(response.getStatus()));
+    return new ResponseEntity<>(response, toHttpStatus(response.getStatus()));
   }
 }
