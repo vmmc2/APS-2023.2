@@ -17,7 +17,7 @@ public class Fachada {
     private final ControladorSignUp controladorSignUp;
     private final ControladorSignIn controladorSignIn;
     private final ControladorRemoverCadastro controladorRemoverCadastro;
-    private final ControldorAdicionarCartao controldorAdicionarCartao;
+    private final ControladorAdicionarCartao controladorAdicionarCartao;
     private final ControladorEfetuarPagamento controladorEfetuarPagamento;
 
     public BasicResponse efetuarSignUp(Conta conta) {
@@ -37,12 +37,12 @@ public class Fachada {
     }
 
     public BasicResponse adicionarCartao(Cartao cartao) {
-        return controldorAdicionarCartao.adicionarCartao(cartao);
+        return controladorAdicionarCartao.adicionarCartao(cartao);
 
     }
 
     public List<Cartao> exibirCartoes(CPF cpf) {
-        return controldorAdicionarCartao.exibirCartoes(cpf);
+        return controladorAdicionarCartao.exibirCartoes(cpf);
     }
 
     public Comprovante efetuarPagamento(Cartao cartao, Carrinho carrinho) {

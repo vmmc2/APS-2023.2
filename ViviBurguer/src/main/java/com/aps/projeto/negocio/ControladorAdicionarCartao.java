@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ControldorAdicionarCartao {
+public class ControladorAdicionarCartao {
   private final CadastroCartoes cadastroCartoes;
   private final IComunicacaoOperadoraCartaoAdapter iComunicacaoOperadoraCartaoAdapter;
   private final static String CAD_CARD_SUCESSO = "Cartão salvo com sucesso";
