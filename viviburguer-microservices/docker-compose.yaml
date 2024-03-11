@@ -4,7 +4,7 @@ services:
   account:
     build: ./account
     ports:
-      - "8000:8000"
+      - "9090:9090"
     network_mode: host
     depends_on:
       - account-register
@@ -12,5 +12,5 @@ services:
   account-register:
     build: ./account-register
     ports:
-      - "8081:8081"
+      - "9091:9091"
     network_mode: host
