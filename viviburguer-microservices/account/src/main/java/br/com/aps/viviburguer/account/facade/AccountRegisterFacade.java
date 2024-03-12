@@ -81,10 +81,21 @@ public class AccountRegisterFacade {
     }
 
     public BasicResponse removerConta(String email, String senha) {
+
+        // Set headers if needed
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Create an HttpEntity with the object and headers
+        Conta conta = new Conta();
+        conta.setEmail(email);
+        conta.setSenha(senha);
+        HttpEntity<Conta> requestEntity = new HttpEntity<>(conta, headers);
+
         ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
                 accountRegisterURL + "/conta/removerConta",
                 HttpMethod.DELETE,
-                HttpEntity.EMPTY,
+                requestEntity,
                 Boolean.class);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
