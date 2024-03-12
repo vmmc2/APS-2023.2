@@ -11,7 +11,7 @@ Repositório para o projeto RUP da disciplina APS 2023.2
 * Zilde Souto Maior Neto (zsmn)
 
 ## Estrutura das Pastas
-* ```APS Projeto 1 - Diagramas```: Diretório contendo todos os diagramas referentes ao projeto RUP.
-* ```ViviBurguer```: Diretório contendo a código do back-end do sistema do "Vivi Burguer".
+* ```SOA```: Diretório contendo todos os diagramas referentes ao projeto de micro-serviços.
+* ```viviburguer-microservices```: Diretório contendo o código do back-end (seguindo micro-serviços) do sistema do "Vivi Burguer".
 * ```creditcardapi```: Diretório contendo o código para comunicação com uma operadora de cartão.
 * ```vivi-burguer-app```: Diretório contendo o código do front-end do sistema do "Vivi Burguer".
