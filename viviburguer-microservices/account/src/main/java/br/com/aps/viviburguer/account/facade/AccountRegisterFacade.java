@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -50,15 +47,16 @@ public class AccountRegisterFacade {
         requestBody.add("email", email);
         requestBody.add("senha", senha);
 
-        // Construir a URL com os query parameters
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(accountRegisterURL + "/conta/existeConta")
-            .queryParams(requestBody);
+        // Define headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // Enviar a solicitação POST com os dados da conta
-        ResponseEntity<Conta> responseEntity = restTemplate.postForEntity(
-            builder.toUriString(),
-            new HttpEntity<>(requestBody),
-            Conta.class);
+        // Create HttpEntity with parameters and headers
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        // Send POST request
+        ResponseEntity<Conta> responseEntity = restTemplate.postForEntity(accountRegisterURL + "/conta/existeConta", requestEntity, Conta.class);
+
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new SignInResponse()

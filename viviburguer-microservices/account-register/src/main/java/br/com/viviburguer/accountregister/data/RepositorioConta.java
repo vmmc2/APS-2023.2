@@ -16,7 +16,10 @@ public class RepositorioConta implements IRepositorioConta{
     }
 
     @Override
-    public boolean existeConta(String email) { return contaDAO.existsByEmail(email); }
+    public boolean existeConta(String email) {
+        return contaDAO.existsByEmail(email);
+    }
+
     @Override
     public Conta encontrar(String email) {
         return contaDAO.findByEmail(email);
