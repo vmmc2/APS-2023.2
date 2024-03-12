@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CadastroContaController {
-    private Fachada fachada;
+    private final Fachada fachada;
 
     @PostMapping("/conta/existeConta")
     public ResponseEntity<Conta> existeConta(@RequestParam("email") String email, @RequestParam("senha") String senha) {

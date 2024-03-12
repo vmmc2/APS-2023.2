@@ -4,6 +4,8 @@ import br.com.viviburguer.common.negocio.entity.Conta;
 import br.com.viviburguer.common.negocio.enumerators.Status;
 import br.com.viviburguer.common.negocio.pojos.BasicResponse;
 import br.com.viviburguer.common.negocio.pojos.SignInResponse;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -11,7 +13,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class AccountRegisterFacade {
@@ -26,11 +31,10 @@ public class AccountRegisterFacade {
     }
 
     public BasicResponse efetuarSignUp(Conta conta) {
-        ResponseEntity<Conta> responseEntity = restTemplate.exchange(
-                accountRegisterURL + "/conta/cadastrarConta",
-                HttpMethod.POST,
-                HttpEntity.EMPTY,
-                Conta.class);
+        ResponseEntity<Conta> responseEntity = restTemplate.postForEntity(
+            accountRegisterURL + "/conta/cadastrarConta",
+            new HttpEntity<>(conta),
+            Conta.class);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new BasicResponse("Conta cadastrada com sucesso!", Status.OK);
@@ -42,11 +46,19 @@ public class AccountRegisterFacade {
     }
 
     public SignInResponse efetuarSignIn(String email, String senha) {
-        ResponseEntity<Conta> responseEntity = restTemplate.exchange(
-                accountRegisterURL + "/conta/existeConta",
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                Conta.class);
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("email", email);
+        requestBody.add("senha", senha);
+
+        // Construir a URL com os query parameters
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(accountRegisterURL + "/conta/existeConta")
+            .queryParams(requestBody);
+
+        // Enviar a solicitação POST com os dados da conta
+        ResponseEntity<Conta> responseEntity = restTemplate.postForEntity(
+            builder.toUriString(),
+            new HttpEntity<>(requestBody),
+            Conta.class);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new SignInResponse()
