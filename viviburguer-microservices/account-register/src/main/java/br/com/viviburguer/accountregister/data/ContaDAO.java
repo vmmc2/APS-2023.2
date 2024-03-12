@@ -7,6 +7,7 @@ public interface ContaDAO extends CrudRepository<Conta, Long> {
     Conta findByEmail(String email);
 
     boolean existsByEmail(String email);
+    boolean existsByEmailAndSenha(String email, String senha);
 
     void deleteByEmail(String email);
 }

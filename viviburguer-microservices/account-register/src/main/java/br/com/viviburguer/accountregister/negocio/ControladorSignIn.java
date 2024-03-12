@@ -12,7 +12,7 @@ public class ControladorSignIn {
 
     private final CadastroContas cadastroContas;
     public Conta efetuarSignIn(String email, String senha) {
-        if(cadastroContas.existeConta(email)) {
+        if(cadastroContas.existeConta(email, senha)) {
             Conta conta = cadastroContas.validarCredenciaisConta(email, senha);
             if (conta != null) {
                 return conta;

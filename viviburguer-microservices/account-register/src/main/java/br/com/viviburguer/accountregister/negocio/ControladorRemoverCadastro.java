@@ -14,7 +14,7 @@ public class ControladorRemoverCadastro {
 
     private final CadastroContas cadastroContas;
     public Boolean removerConta(Conta conta) {
-        if(cadastroContas.existeConta(conta.getEmail())) {
+        if(cadastroContas.existeEmail(conta.getEmail())) {
             Conta contaDb = cadastroContas.validarCredenciaisConta(conta.getEmail(), conta.getSenha());
             if(contaDb != null) {
                 cadastroContas.apagarConta(conta.getEmail());

@@ -14,11 +14,11 @@ public class CadastroContas {
     }
 
     public boolean existeEmail(String email) {
-        return repositorioConta.existeConta(email);
+        return repositorioConta.existeEmail(email);
     }
 
-    public boolean existeConta(String email) {
-        return repositorioConta.existeConta(email);
+    public boolean existeConta(String email, String senha) {
+        return repositorioConta.existeConta(email, senha);
 
     }
     public Conta exibir(String email) {
