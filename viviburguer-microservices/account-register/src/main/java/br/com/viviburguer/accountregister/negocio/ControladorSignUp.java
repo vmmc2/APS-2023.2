@@ -14,7 +14,7 @@ public class ControladorSignUp {
     private static final  String CADASTRO_EXISTE = "Conta já existe";
 
     public Conta efetuarSignUp(Conta conta) {
-        if(!cadastroContas.existeConta(conta.getEmail())) {
+        if(!cadastroContas.existeEmail(conta.getEmail())) {
             if (cadastroContas.registrarConta(conta)) {
                 return conta;
             } else {
