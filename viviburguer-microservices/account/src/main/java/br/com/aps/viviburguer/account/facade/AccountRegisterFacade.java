@@ -4,34 +4,38 @@ import br.com.viviburguer.common.negocio.entity.Conta;
 import br.com.viviburguer.common.negocio.enumerators.Status;
 import br.com.viviburguer.common.negocio.pojos.BasicResponse;
 import br.com.viviburguer.common.negocio.pojos.SignInResponse;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class AccountRegisterFacade {
     private final RestTemplate restTemplate;
+    private final CircuitBreakerFactory circuitBreakerFactory;
+    private final CircuitBreaker circuitBreaker;
 
     @Value("${account.register.url}")
     private String accountRegisterURL;
 
+
     @Autowired
-    public AccountRegisterFacade(RestTemplate restTemplate) {
+    public AccountRegisterFacade(RestTemplate restTemplate, CircuitBreakerFactory circuitBreakerFactory) {
         this.restTemplate = restTemplate;
+        this.circuitBreakerFactory = circuitBreakerFactory;
+        this.circuitBreaker = this.circuitBreakerFactory.create("accountRegisterCircuitBreaker");
     }
 
     public BasicResponse efetuarSignUp(Conta conta) {
-        ResponseEntity<Conta> responseEntity = restTemplate.postForEntity(
+        ResponseEntity<Conta> responseEntity = this.circuitBreaker.run(() -> restTemplate.postForEntity(
             accountRegisterURL + "/conta/cadastrarConta",
             new HttpEntity<>(conta),
-            Conta.class);
+            Conta.class));
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new BasicResponse("Conta cadastrada com sucesso!", Status.OK);
@@ -55,7 +59,7 @@ public class AccountRegisterFacade {
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
         // Send POST request
-        ResponseEntity<Conta> responseEntity = restTemplate.postForEntity(accountRegisterURL + "/conta/existeConta", requestEntity, Conta.class);
+        ResponseEntity<Conta> responseEntity = this.circuitBreaker.run(() ->restTemplate.postForEntity(accountRegisterURL + "/conta/existeConta", requestEntity, Conta.class));
 
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -92,11 +96,11 @@ public class AccountRegisterFacade {
         conta.setSenha(senha);
         HttpEntity<Conta> requestEntity = new HttpEntity<>(conta, headers);
 
-        ResponseEntity<Boolean> responseEntity = restTemplate.exchange(
+        ResponseEntity<Boolean> responseEntity = this.circuitBreaker.run(() ->restTemplate.exchange(
                 accountRegisterURL + "/conta/removerConta",
                 HttpMethod.DELETE,
                 requestEntity,
-                Boolean.class);
+                Boolean.class));
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return new BasicResponse("Conta removida com sucesso!", Status.OK);
